@@ -1,7 +1,11 @@
 import socket
 
-s = socket.socket()
+serverSocket = socket.socket()
 
-host = s.getHostName()
+host = socket.getHostName()
 port = 12345
-s.bind(
+serverSocket.bind((host, port))
+serverSocket.listen(5)
+
+while True:
+	clientSocket, clientAddress = serverSocket.accept()
