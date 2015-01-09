@@ -1,6 +1,9 @@
 # MyIRC README File
 This is the README file for the MyIRC (name is a work in progress) client. 
 
+v0.1
+
+
 ## Project Brief
 This project is a simple voip/chat client that will be able to connect 
 to an MyIRC server. MyIRC is intended to be similar to other voip 
