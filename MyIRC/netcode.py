@@ -1,4 +1,4 @@
-import socket
+import socket, sys
 
 # Contains basic information about a server that the user is connected
 # to. Stores the socket and facilitates communication between the client
@@ -23,7 +23,17 @@ class Server(object):
 		self.s.close()
 		
 	def SendMessage(self, message):
-		self.s.send(message)
+		self.s.send(str(message))
 
 	def ReceieveMessage(self):
 		return(self.s.recv(1024))
+		
+class Message(object):
+	
+	def __init__(self, message, type = 0):
+		self.type = type
+		self.message = message
+		self.length = sys.getsizeof(type) + sys.getsizeof(message)
+		
+	def __str__(self):
+		return(str(self.length) + ":" + str(self.type) + ":" + self.message)
