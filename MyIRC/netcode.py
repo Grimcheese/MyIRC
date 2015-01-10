@@ -8,9 +8,9 @@ class Socks(object):
 		else:
 			self.s = s
 			
-	# Should be passing server object not host and port
-	def ConnectToServer(self, host, port):
-		self.s.connect((host, port))
+	# Connects to a server using the server's address and port members
+	def ConnectToServer(self, server):
+		self.s.connect((server.get(address), server.get(port)))
 	
 	def DisconnectFromServer(self):
 		self.s.close()
@@ -25,4 +25,7 @@ class Socks(object):
 # to.
 class Server(object):
 	
-	def __init__(self):
+	def __init__(self, name, address, port):
+		self.name = name
+		self.address = address
+		self.port = port
