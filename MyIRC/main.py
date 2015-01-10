@@ -1,11 +1,9 @@
 import socket
-from netcode import Socks
+from netcode import Server
 
+testserver = Server("Test Server", socket.gethostname(), 12345)
 
-
-server = Socks()
-
-server.ConnectToServer(socket.gethostname(),12345)
-server.SendMessage("Testing, one two three.")
-server.DisconnectFromServer()
+testserver.ConnectToServer()
+testserver.SendMessage("Testing, one two three.")
+testserver.DisconnectFromServer()
 
