@@ -17,3 +17,12 @@ class Socks(object):
 		
 	def SendMessage(self, message):
 		self.s.send(message)
+
+	def ReceieveMessage(self):
+		return(self.s.recv(1024))
+		
+# Contains basic information about a server that the user is connected
+# to.
+class Server(object):
+	
+	def __init__(self):
