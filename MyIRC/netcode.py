@@ -76,11 +76,10 @@ class Server(object):
 		self.sock = None
 		
 	def SendMessage(self, message):
-		self.s.send(str(message))
+		self.sock.Send(message)
 
 	def ReceieveMessage(self):
-		while bit != ":"
-		bit = self.s.recv(1)
+		self.sock.Receive()
 		
 	##################################################################
 # Class to store network messages
@@ -94,7 +93,7 @@ class Message(object):
 	def __init__(self, message, type = 0):
 		self.type = type
 		self.message = message
-		self.length = sys.getsizeof(type) + sys.getsizeof(message)
+		self.length = sys.getsizeof(str(self))
 		
 	def __str__(self):
 		return(str(self.type) + ":" + self.message)
