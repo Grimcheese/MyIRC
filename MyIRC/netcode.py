@@ -33,6 +33,19 @@ class Socks(object):
 				raise RuntimeError("Connection broken")
 			totalsent = totalsent + sent
 	
+	def Receive(self, length):
+		chunks = []
+		bytes_recd = 0
+		
+		while bytes_recd < length:
+			chunk = self.sock.recv(min(length - bytes_recd, 2048))
+			if chunk == '':
+				raise RuntimeError("Connection lost")
+			chunks.append(chunk)
+			bytes_recd = bytes_recd + len(chunk)
+			
+		return ''.join(chunks)
+		
 # Contains basic information about a server that the user is connected
 # to. Stores the socket and facilitates communication between the client
 # and the server.
