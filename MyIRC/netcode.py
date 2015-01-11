@@ -22,12 +22,13 @@ class Socks(object):
 	# using the Connect() function
 	def Send(self, message):
 		# Send the length
-		self.sock.send(str(message.length) + ":")
+		self.sock.send(str(message.length).encode())
 	
 		# Send the message
 		totalsent = 0
+		encodedMsg = str(message).encode()
 		while totalsent < message.length:
-			sent = self.sock.send(str(message))
+			sent = self.sock.send(encodedMsg[totalsent:])
 			if sent == 0:
 				raise RuntimeError("Connection broken")
 			totalsent = totalsent + sent
@@ -43,17 +44,12 @@ class Socks(object):
 # sock is not instantiated until actually connecting to the server.
 class Server(object):
 	
-	# Class attributes
-	instances = 0 # Keeps track of the number of servers currently instantiated
-	
 	def __init__(self, name, address, port, sock = None):
 		self.name = name
 		self.address = address
 		self.port = port
 		
 		self.sock = sock
-		
-		instances += 1
 	
 	##################################################################
 	# The following methods use the Socks class 
@@ -72,14 +68,14 @@ class Server(object):
 	# future connections with the Server object a new socket can be
 	# created
 	def DisconnectFromServer(self):
-		self.sock.close()
+		self.sock.Disconnect()
 		self.sock = None
 		
 	def SendMessage(self, message):
 		self.sock.Send(message)
 
 	def ReceieveMessage(self):
-		self.sock.Receive()
+		message = self.sock.Receive()
 		
 	##################################################################
 # Class to store network messages
@@ -93,7 +89,7 @@ class Message(object):
 	def __init__(self, message, type = 0):
 		self.type = type
 		self.message = message
-		self.length = sys.getsizeof(str(self))
+		self.length = len(str(self))
 		
 	def __str__(self):
 		return(str(self.type) + ":" + self.message)

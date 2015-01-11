@@ -10,4 +10,18 @@ def test_message():
 	
 	assert_equal(testmessage.type, 0) 
 	assert_equal(testmessage.message, "test message to send")
-	assert_equal(testmessage.length, sys.getsizeof(str(testmessage)))
+	assert_equal(testmessage.length, len(str(testmessage)))
+	
+def test_Server():
+	testserver = Server("test", socket.gethostname(), 12345)
+	tempmessage = Message("test message")
+	
+	assert_equal(testserver.name, "test")
+	assert_equal(testserver.address, socket.gethostname())
+	assert_equal(testserver.port, 12345)
+	
+	testserver.ConnectToServer()
+	testserver.SendMessage(tempmessage)
+	
+	
+	

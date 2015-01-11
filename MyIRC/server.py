@@ -1,6 +1,6 @@
 import socket
 
-
+print("TEST SERVER IS NOW UP")
 
 clients = []
 
@@ -18,9 +18,8 @@ serverSocket.listen(5)
 while True:
 	clientSocket, clientAddress = serverSocket.accept()
 	
+	length = clientSocket.recv(14)
+	
 	data = clientSocket.recv(1024) # Receive up to 1024 bytes from the client
-	
 	print(data)
-	
-class Client(object):
 	
