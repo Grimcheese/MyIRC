@@ -15,7 +15,11 @@ def test_Message():
 def test_Socks():
 	testsocket = Socks()
 	testserver = Server("SocksTest", socket.gethostname(), 12345)
-	testsocket.Connect("localhost", testserver.port)
+	testmessage = Message("Socks test message")
+	
+	testsocket.Connect(socket.gethostname(), 12345)
+	testsocket.Send(testmessage)
+	testsocket.Disconnect()
 	
 def test_Server():
 	testserver = Server("test", socket.gethostname(), 12345)
@@ -25,8 +29,9 @@ def test_Server():
 	assert_equal(testserver.address, socket.gethostname())
 	assert_equal(testserver.port, 12345)
 	
-	testserver.ConnectToServer()
+	testserver.EstablishConnection()
 	testserver.SendMessage(tempmessage)
+	testserver.CloseConnection()
 	
 	
 	

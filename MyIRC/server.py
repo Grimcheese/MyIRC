@@ -34,6 +34,11 @@ while True:
 	# Get the length of the incoming message
 	length = int(GetMessageLength(clientSocket))
 	
-	data = clientSocket.Receive(length) 
+	data = clientSocket.Receive(length)
+	
+	# Message is handled
 	print(data)
 	
+	# Socket is destroyed
+	clientSocket.Disconnect()
+	del clientSocket

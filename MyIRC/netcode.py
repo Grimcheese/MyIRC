@@ -23,7 +23,7 @@ class Socks(object):
 	# using the Connect() function
 	def Send(self, message):
 		# Send the length
-		self.sock.send(str(message.length).encode() + ":")
+		self.sock.send(str(message.length).encode() + b":")
 	
 		# Send the message
 		totalsent = 0
@@ -92,7 +92,10 @@ class Server(object):
 		
 	##################################################################
 # Class to store network messages
-
+#
+# The length is used to indicate to the receiver how long the rest of 
+# the message is
+#
 # Message type indicates how the message should be handled by the client
 # Type 0 is meta data
 # Type 1 is voice data
@@ -107,5 +110,7 @@ class Message(object):
 	def __str__(self):
 		return(str(self.type) + ":" + self.message)
 		
-	#def ConvertToMessage(inString):
-	#	for i in inString:
+	def ConvertToMessage(inString):
+		
+		for i in inString:
+			
