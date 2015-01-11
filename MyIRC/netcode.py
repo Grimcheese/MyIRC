@@ -16,13 +16,14 @@ class Socks(object):
 	# Disconnects the socket and closes it. CAN NO LONGER BE USED
 	def Disconnect(self):
 		self.sock.close()
+		del self.sock
 		
 	# Sends the message object to the connected socket
 	# This function assumes that the socket has already been connected
 	# using the Connect() function
 	def Send(self, message):
 		# Send the length
-		self.sock.send(str(message.length).encode())
+		self.sock.send(str(message.length).encode() + ":")
 	
 		# Send the message
 		totalsent = 0
@@ -43,7 +44,6 @@ class Socks(object):
 				raise RuntimeError("Connection lost")
 			chunks.append(chunk)
 			bytes_recd = bytes_recd + len(chunk)
-			
 		return ''.join(chunks)
 		
 # Contains basic information about a server that the user is connected
@@ -73,14 +73,14 @@ class Server(object):
 	#
 	# Note that a new Socks object is only created if Server does not 
 	# already have a Socks object
-	def ConnectToServer(self):
+	def EstablishConnection(self):
 		self.sock = Socks(self.sock) 
 		self.sock.Connect(self.address, self.port)
 	
 	# CLoses the socket and sets sock to None so if there are any 
 	# future connections with the Server object a new socket can be
 	# created
-	def DisconnectFromServer(self):
+	def CloseConnection(self):
 		self.sock.Disconnect()
 		self.sock = None
 		
@@ -106,3 +106,6 @@ class Message(object):
 		
 	def __str__(self):
 		return(str(self.type) + ":" + self.message)
+		
+	#def ConvertToMessage(inString):
+	#	for i in inString:
