@@ -1,5 +1,5 @@
 import socket
-from netcode import Socks, Message
+from netcode import Socks, Message, Server, BaseClient
 
 print("TEST SERVER IS NOW UP")
 
@@ -13,15 +13,7 @@ port = 12345
 serverSocket.sock.bind((host, port))
 serverSocket.sock.listen(5)
 
-def GetMessageLength(sock):
-	bits = []
-	bit = 'a'
-	while bit != ":":
-		bit = sock.Receive(1)
-		if bit != ":":
-			bits.append(bit)
-			
-	return ''.join(bits)
+
 
 
 # Receiving loop
@@ -29,16 +21,12 @@ def GetMessageLength(sock):
 # the new client socket
 while True:
 	clientSocket, clientAddress = serverSocket.sock.accept()
-	clientSocket = Socks(clientSocket)
+	testClient = BaseClient("CLIENT", clientAddress[0], clientAddress[1], clientSocket)
 	
-	# Get the length of the incoming message
-	length = int(GetMessageLength(clientSocket))
-	
-	data = clientSocket.Receive(length)
+	data = testClient.ReceiveMessage()
 	
 	# Message is handled
 	print(data)
 	
 	# Socket is destroyed
-	clientSocket.Disconnect()
-	del clientSocket
+	testClient.CloseConnection()

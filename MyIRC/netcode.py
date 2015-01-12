@@ -9,7 +9,7 @@ class Socks(object):
 		else:
 			self.sock = sock
 	
-	# Establishes a connection with the host and port 
+	# Establishes a connection with the hostname and port 
 	def Connect(self, host, port):
 		self.sock.connect((host, port))
 		
@@ -46,23 +46,28 @@ class Socks(object):
 			bytes_recd = bytes_recd + len(chunk)
 		return ''.join(chunks)
 		
-# Contains basic information about a server that the user is connected
-# to. Stores the socket and facilitates communication between the client
-# and the server.
-
+# Contains basic information for a client. Note that a client could
+# also refer to a server.
+#
+# Contains name, IP/hostname and the port that refers to the client.
+# Can also contain a socket that is used during transmissions.
+#
 # Class relationships
 #	Has-a Socks (socket) object as an attribute
 #	Uses a message object to pass to the socket for transmission
 #
-# sock is not instantiated until actually connecting to the server.
-class Server(object):
+# A new Socks object is created for each transmission.
+class BaseClient(object):
 	
 	def __init__(self, name, address, port, sock = None):
 		self.name = name
 		self.address = address
 		self.port = port
 		
-		self.sock = sock
+		if sock is None:
+			self.sock = None
+		else:
+			self.sock = Socks(sock)
 	
 	##################################################################
 	# The following methods use the Socks class 
@@ -87,11 +92,38 @@ class Server(object):
 	def SendMessage(self, message):
 		self.sock.Send(message)
 
-	def ReceieveMessage(self):
-		message = self.sock.Receive()
+	def ReceiveMessage(self):
+		length = int(self._GetMessageLength(self.sock))
+		message = self.sock.Receive(length)
+		return message
+		
+	def _GetMessageLength(self, sock):
+		bits = []
+		bit = 'a'
+		while bit != ":":
+			bit = sock.Receive(1)
+			if bit != ":":
+				bits.append(bit)
+				
+		return ''.join(bits)	
 		
 	##################################################################
-# Class to store network messages
+
+# Server client class
+#
+# Inherits from BaseClient
+class Server(BaseClient):
+	
+	def __init__(self, name, address, port, sock = None):
+		super(Server, self).__init__(name, address, port, sock)
+	
+class Client(BaseClient):
+	
+	def __init__(self, name, address, port, sock = None):
+		super(Client, self).__init__(name, address, port, sock)
+		
+
+	# Class to store network messages
 #
 # The length is used to indicate to the receiver how long the rest of 
 # the message is
@@ -108,9 +140,4 @@ class Message(object):
 		self.length = len(str(self))
 		
 	def __str__(self):
-		return(str(self.type) + ":" + self.message)
-		
-	def ConvertToMessage(inString):
-		
-		for i in inString:
-			
+		return(str(self.type) + ":" + self.message)			

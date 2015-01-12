@@ -5,7 +5,12 @@ testserver = Server("Test Server", socket.gethostname(), 12345)
 
 msg = Message("Doing test things and such")
 
-testserver.ConnectToServer()
-testserver.SendMessage(msg)
-testserver.DisconnectFromServer()
 
+
+def ConnectToServer(server):
+	server.EstablishConnection()
+	connectMessage = Message("CONNECT", 0)
+	server.SendMessage(connectMessage)
+	server.CloseConnection()
+	
+ConnectToServer(testserver)
