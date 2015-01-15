@@ -99,10 +99,10 @@ class BaseClient(object):
 		
 	def _GetMessageLength(self, sock):
 		bits = []
-		bit = 'a'
-		while bit != ":":
+		bit = '0'
+		while bit != Message.delimiter:
 			bit = sock.Receive(1)
-			if bit != ":":
+			if bit != Message.delimiter:
 				bits.append(bit)
 				
 		return ''.join(bits)	
@@ -134,10 +134,24 @@ class Client(BaseClient):
 # Type 2 is text data		
 class Message(object):
 	
-	def __init__(self, message, type = 0):
+	delimiter = '\n'
+	
+	def __init__(self, type, message):
+		assert type >= 0 and type <= 3
+		
 		self.type = type
 		self.message = message
 		self.length = len(str(self))
 		
+	def GetType(self):
+		if self.type == 0:
+			typeString = "META"
+		elif self.type == 1:
+			typeString = "VOICE"
+		elif self.type == 2:
+			typeString = "TEXT"
+			
+		return typeString
+		
 	def __str__(self):
-		return(str(self.type) + ":" + self.message)			
+		return(str(self.type) + Message.delimiter + self.message)			
