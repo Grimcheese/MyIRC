@@ -11,11 +11,16 @@ class Message(object):
 	
 	delimiter = '\n'
 	
-	def __init__(self, type, message):
+	def __init__(self, type, message, params = []):
 		assert type >= 0 and type <= 3
 		
 		self.type = type
 		self.message = message
+		if len(params) == 0:
+			self.paramaters = []
+		else:
+			self.paramaters = params
+		
 		self.length = len(str(self))
 		
 	def GetType(self):
@@ -29,4 +34,8 @@ class Message(object):
 		return typeString
 		
 	def __str__(self):
-		return(str(self.type) + Message.delimiter + self.message)			
+		return(str(self.type) + Message.delimiter + self.message)
+		
+# Class to handle messages that are received. TODO!!!
+class MessageHandler(object):
+	pass

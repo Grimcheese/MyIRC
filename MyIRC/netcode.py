@@ -1,3 +1,5 @@
+from messaging import *
+
 import socket, sys
 
 """
@@ -95,8 +97,8 @@ class BaseClient(object):
 	# Connects to and instantiates the server socket using the server's 
 	# address and port which are provided by the user.
 	#
-	# Note that a new Socks object is only created if Server does not 
-	# already have a Socks object
+	# Note that a new Socks object is only created if one is not 
+	# already instantiate
 	def EstablishConnection(self):
 		self.sock = Socks(self.sock) 
 		self.sock.Connect(self.address, self.port)

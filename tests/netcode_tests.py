@@ -1,5 +1,6 @@
 from nose.tools import *
 from MyIRC.netcode import *
+from MyIRC.messaging import *
 
 import sys
 
