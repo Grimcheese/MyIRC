@@ -1,7 +1,25 @@
 import socket, sys
 
+"""
+	Source file for networking code related to MyIRC
+	
+	Contains the following classes:
+		Socks
+			Basic socket class used to interface with socket
+		BaseClient
+			Contains basic client info; name, address etc.
+		Client/Server
+			Wrapper classes for BaseClient. Used to differentiate a 
+			BaseClient between a server and an actual client.
+			
+"""
 
-# My basic socket object to handle connections between sockets
+
+
+# Basic socket object that acts as an interface between MyIRC and 
+# socket. 
+# Provides easy to use Send and Receive methods that ensure
+# all of a message is sent or received before moving on.
 class Socks(object):
 	def __init__(self, sock = None):
 		if sock is None:
@@ -23,7 +41,7 @@ class Socks(object):
 	# using the Connect() function
 	def Send(self, message):
 		# Send the length
-		self.sock.send(str(message.length).encode() + b":")
+		self.sock.send((str(message.length) + Message.delimiter).encode())
 	
 		# Send the message
 		totalsent = 0
@@ -40,6 +58,7 @@ class Socks(object):
 		
 		while bytes_recd < length:
 			chunk = self.sock.recv(min(length - bytes_recd, 2048))
+			chunk = chunk.decode()
 			if chunk == '':
 				raise RuntimeError("Connection lost")
 			chunks.append(chunk)
@@ -99,7 +118,7 @@ class BaseClient(object):
 		
 	def _GetMessageLength(self, sock):
 		bits = []
-		bit = '0'
+		bit = ''
 		while bit != Message.delimiter:
 			bit = sock.Receive(1)
 			if bit != Message.delimiter:
@@ -121,37 +140,3 @@ class Client(BaseClient):
 	
 	def __init__(self, name, address, port, sock = None):
 		super(Client, self).__init__(name, address, port, sock)
-		
-
-	# Class to store network messages
-#
-# The length is used to indicate to the receiver how long the rest of 
-# the message is
-#
-# Message type indicates how the message should be handled by the client
-# Type 0 is meta data
-# Type 1 is voice data
-# Type 2 is text data		
-class Message(object):
-	
-	delimiter = '\n'
-	
-	def __init__(self, type, message):
-		assert type >= 0 and type <= 3
-		
-		self.type = type
-		self.message = message
-		self.length = len(str(self))
-		
-	def GetType(self):
-		if self.type == 0:
-			typeString = "META"
-		elif self.type == 1:
-			typeString = "VOICE"
-		elif self.type == 2:
-			typeString = "TEXT"
-			
-		return typeString
-		
-	def __str__(self):
-		return(str(self.type) + Message.delimiter + self.message)			
