@@ -1,5 +1,5 @@
 import socket
-from netcode import Socks, Message, Server, BaseClient
+from netcode import *
 
 print("TEST SERVER STARTING UP")
 
@@ -17,7 +17,9 @@ serverSocket.sock.listen(5)
 # message object.
 def StringToMessageObject(messageString):
 	messageParts = messageString.split(Message.delimiter)
-	message = Message(tempMessage[0], tempMessage[1])
+	type = eval(messageParts[0])
+	str = messageParts[1]
+	message = Message(type, str)
 	
 	return message
 
@@ -35,6 +37,8 @@ def CommunicationMessageHandler(msg):
 def MetaMessageHandler(msg):
 	print(msg)
 	attributes = msg.message.split(" ")
+	
+	# If a client is requesting a connection to the server
 	if attributes[0] == "CONNECT":
 		newClient = Client(attributes[1], attributes[2], port)
 		clientList.append(newClient)

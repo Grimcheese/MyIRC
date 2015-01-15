@@ -1,16 +1,14 @@
 import socket
 from netcode import Server, Message
 
-testserver = Server("Test Server", socket.gethostname(), 12345)
-
-msg = Message("Doing test things and such")
+server = Server("Test Server", socket.gethostname(), 12345)
 
 
 
 def ConnectToServer(server):
 	server.EstablishConnection()
-	connectMessage = Message("CONNECT", 0)
+	connectMessage = Message(0, "CONNECT Alby 192.168.1.6")
 	server.SendMessage(connectMessage)
 	server.CloseConnection()
 	
-ConnectToServer(testserver)
+ConnectToServer(server)

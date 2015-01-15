@@ -10,15 +10,16 @@ serverAddress = "Grim-PC"
 serverPort = 12345
 
 def test_Message():
-	testmessage = Message("TestMessage message", 0)
+	testmessage = Message(0, "TestMessage message")
 	
 	assert_equal(testmessage.type, 0) 
 	assert_equal(testmessage.message, "TestMessage message")
 	assert_equal(testmessage.length, len(str(testmessage)))
+	assert_equal(testmessage.GetType(), "META")
 	
 def test_Socks():
 	testsocket = Socks()
-	testmessage = Message("Socks test message")
+	testmessage = Message(1, "Socks test message")
 	
 	assert(testsocket != None)
 	testsocket.Connect(serverAddress, serverPort)
@@ -35,7 +36,7 @@ def test_BaseClient():
 	assert_equal(testBaseClient.address, testAddress)
 	assert_equal(testBaseClient.port, testPort)
 	
-	testmessage = Message("BaseClient message test", 0)
+	testmessage = Message(0, "BaseClient message test")
 	
 	testBaseClient.EstablishConnection()
 	testBaseClient.SendMessage(testmessage)
@@ -43,7 +44,7 @@ def test_BaseClient():
 	
 def test_Server():
 	testserver = Server("testserver", serverAddress, serverPort)
-	tempmessage = Message("ServerTestMessage")
+	tempmessage = Message(0, "ServerTestMessage")
 	
 	assert_equal(testserver.name, "testserver")
 	assert_equal(testserver.address, serverAddress)
