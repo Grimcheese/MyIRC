@@ -13,15 +13,14 @@ class Message(object):
 	
 	delimiter = '\n'
 	
-	def __init__(self, type, message, params = []):
+	def __init__(self, type, message, params = ""):
 		assert type >= 0 and type <= 3
 		
 		self.type = type
 		self.message = message
-		if len(params) == 0:
-			self.parameters = []
-		else:
-			self.parameters = params
+		self.parameters = []
+		if len(params) != 0:
+			self.parameters = params.split(" ")
 	
 	# Returns the length as an int
 	def Length(self):
@@ -47,9 +46,27 @@ class Message(object):
 			options = options + " " + option
 		options = options.lstrip()
 		return(str(self.type) + Message.delimiter + self.message + \
-		Message.delimiter + options)
+		Message.delimiter + options + Message.delimiter)
 		
 # Class to handle messages that are received. TODO!!!
 class MessageHandler(object):
 	pass
+
+# Helper functions for dealing with messages in general
+######################################################################
+
+# Converts a string to a message object. 
+#
+# It is assumed that the string passed to this function is of the form:
+#	TYPE\nACTION\nPARAMETERS\n
+#	Parameters does not need to be included
+def StringToMessageObject(messageString):
+	parts = messageString.split(Message.delimiter)
+	type = eval(parts[0])
+	str = parts[1]
+	params = parts[2].split(" ")
+
+	message = Message(type, str, params)
+	
+	return message
 	
