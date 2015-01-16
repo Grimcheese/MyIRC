@@ -1,6 +1,5 @@
 from nose.tools import *
-from MyIRC.netcode import *
-from MyIRC.messaging import *
+import MyIRC.src.netcode 
 
 import sys
 
@@ -15,7 +14,7 @@ def test_Message():
 	
 	assert_equal(testmessage.type, 0) 
 	assert_equal(testmessage.message, "TestMessage message")
-	assert_equal(testmessage.length, len(str(testmessage)))
+	assert_equal(testmessage.Length(), len(str(testmessage)))
 	assert_equal(testmessage.GetType(), "META")
 	
 def test_Socks():
@@ -24,7 +23,7 @@ def test_Socks():
 	
 	assert(testsocket != None)
 	testsocket.Connect(serverAddress, serverPort)
-	testsocket.Send(testmessage)
+	testsocket.Send(testmessage, testmessage.Length())
 	testsocket.Disconnect()
 	
 def test_BaseClient():

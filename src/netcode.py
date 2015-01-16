@@ -13,6 +13,7 @@ import socket, sys
 		Client/Server
 			Wrapper classes for BaseClient. Used to differentiate a 
 			BaseClient between a server and an actual client.
+			Adds Client/Server functionality to the BaseClient
 			
 """
 
@@ -38,17 +39,19 @@ class Socks(object):
 		self.sock.close()
 		del self.sock
 		
+	
+	# TODO
+	# 	Move length sending to BaseClient.Send()
+	#	Make Send() send only a string, not a message
+	
 	# Sends the message object to the connected socket
 	# This function assumes that the socket has already been connected
 	# using the Connect() function
-	def Send(self, message):
-		# Send the length
-		self.sock.send((str(message.length) + Message.delimiter).encode())
-	
+	def Send(self, messageStr, length):
 		# Send the message
 		totalsent = 0
-		encodedMsg = str(message).encode()
-		while totalsent < message.length:
+		encodedMsg = messageStr.encode()
+		while totalsent < length:
 			sent = self.sock.send(encodedMsg[totalsent:])
 			if sent == 0:
 				raise RuntimeError("Connection broken")
@@ -111,7 +114,8 @@ class BaseClient(object):
 		self.sock = None
 		
 	def SendMessage(self, message):
-		self.sock.Send(message)
+		self.sock.Send(message.DelimitedLength(), len(message.DelimitedLength()))
+		self.sock.Send(str(message), message.Length())
 
 	def ReceiveMessage(self):
 		length = int(self._GetMessageLength(self.sock))
@@ -137,8 +141,10 @@ class Server(BaseClient):
 	
 	def __init__(self, name, address, port, sock = None):
 		super(Server, self).__init__(name, address, port, sock)
+		self.clientList = []
 	
 class Client(BaseClient):
 	
 	def __init__(self, name, address, port, sock = None):
 		super(Client, self).__init__(name, address, port, sock)
+		self.serverList = []

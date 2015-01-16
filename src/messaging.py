@@ -7,6 +7,8 @@
 # Type 0 is meta data
 # Type 1 is voice data
 # Type 2 is text data		
+#
+# Parameters is a series of options that are separated by a " " character
 class Message(object):
 	
 	delimiter = '\n'
@@ -17,12 +19,18 @@ class Message(object):
 		self.type = type
 		self.message = message
 		if len(params) == 0:
-			self.paramaters = []
+			self.parameters = []
 		else:
-			self.paramaters = params
-		
-		self.length = len(str(self))
-		
+			self.parameters = params
+	
+	# Returns the length as an int
+	def Length(self):
+		return len(str(self))
+	
+	# Returns the length + the delimiter as a string
+	def DelimitedLength(self):
+		return str(self.Length()) + Message.delimiter
+	
 	def GetType(self):
 		if self.type == 0:
 			typeString = "META"
@@ -34,7 +42,12 @@ class Message(object):
 		return typeString
 		
 	def __str__(self):
-		return(str(self.type) + Message.delimiter + self.message)
+		options = ""
+		for option in self.parameters:
+			options = options + " " + option
+		options = options.lstrip()
+		return(str(self.type) + Message.delimiter + self.message + \
+		Message.delimiter + options)
 		
 # Class to handle messages that are received. TODO!!!
 class MessageHandler(object):

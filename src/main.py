@@ -1,5 +1,6 @@
 import socket
-from netcode import Server, Message
+from netcode import *
+from messaging import *
 
 server = Server("Test Server", socket.gethostname(), 12345)
 

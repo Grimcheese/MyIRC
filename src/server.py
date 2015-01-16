@@ -1,5 +1,6 @@
 import socket
 from netcode import *
+from messaging import *
 
 print("TEST SERVER STARTING UP")
 
@@ -63,9 +64,10 @@ while True:
 	
 	msgString = tempClient.ReceiveMessage()
 	
+	print(msgString)
 	# Message is handled
-	clientMessage = StringToMessageObject(msgString)
-	MessageHandler(clientMessage)
+	#clientMessage = StringToMessageObject(msgString)
+	#MessageHandler(clientMessage)
 	
 	# Socket is destroyed
 	tempClient.CloseConnection()
