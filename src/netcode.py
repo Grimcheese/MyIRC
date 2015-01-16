@@ -1,4 +1,4 @@
-from messaging import *
+from messaging import Message
 
 import socket, sys
 
@@ -39,11 +39,7 @@ class Socks(object):
 		self.sock.close()
 		del self.sock
 		
-	
-	# TODO
-	# 	Move length sending to BaseClient.Send()
-	#	Make Send() send only a string, not a message
-	
+		
 	# Sends the message object to the connected socket
 	# This function assumes that the socket has already been connected
 	# using the Connect() function

@@ -52,3 +52,4 @@ class Message(object):
 # Class to handle messages that are received. TODO!!!
 class MessageHandler(object):
 	pass
+	
