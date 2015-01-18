@@ -15,6 +15,8 @@ import socket, sys
 			BaseClient between a server and an actual client.
 			Adds Client/Server functionality to the BaseClient
 			
+	The BaseClient (and children) class(es) is reliant on the Message
+	class to send and receive messages.
 """
 
 
