@@ -65,11 +65,11 @@ a command line on one monitor)
 ## File structure
 
 MyIRC/  
-	   src/  
-	   bin/  
-	   docs/  
-	   setup.py  
-	   tests/  
+. src/  
+. bin/  
+. docs/  
+. setup.py  
+. tests/  
 		
 The file structure and general setup of the project is from 
 	learnpythonthehardway.org
