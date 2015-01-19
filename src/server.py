@@ -14,16 +14,6 @@ port = 12345
 serverSocket.sock.bind((host, port))
 serverSocket.sock.listen(5)
 
-# Converts a message received via a socket as a string to an actual 
-# message object.
-def StringToMessageObject(messageString):
-	messageParts = messageString.split(Message.delimiter)
-	type = eval(messageParts[0])
-	str = messageParts[1]
-	message = Message(type, str)
-	
-	return message
-
 # When the server receives a communication message from a client the
 # server will send that message to all the other clients that are 
 # connected to the server.

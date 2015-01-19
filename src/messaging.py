@@ -48,10 +48,14 @@ class Message(object):
 		return(str(self.type) + Message.delimiter + self.message + \
 		Message.delimiter + options + Message.delimiter)
 		
-
+# Abstract MessageHandler class 
 class MessageHandler(object):
-	pass
+	
+	def __init__(self):
 		
+	def HandleMessage(self, message):
+		
+	
 # The messageQueue is a list of all the messages that have yet to 
 # be handled. It should only be accessed using the functions provided:
 #	Enqueue(message)
@@ -82,6 +86,7 @@ class MessageQueue(object):
 
 # Helper functions for dealing with messages in general
 ######################################################################
+
 
 # Converts a string to a message object. 
 #

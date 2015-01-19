@@ -1,5 +1,5 @@
 # MyIRC README File
-This is the README file for the MyIRC (name is a work in progress) client. 
+This is the README file for MyIRC (name is a work in progress). 
 
 v0.1
 
@@ -13,11 +13,9 @@ to communicate over both mediums of voice and text.
 Text chat should be easy to use and convenient for users to go with or
 without it while using voip as the main feature.
 
-Text and voice should appear to be in the same client for the user but 
-they will actually connect to two different servers. This gives the
-user the ability to be on one text server while also being on a 
-different voice server simultaneously. Also possibly include the ability
-to connect to multiple servers at any one point in time.
+The user should be able to connect to a server only using text, voice 
+or both. The user should also be able to connect to multiple servers 
+simultaneously. 
 
 ## Project Phases
 The Project is going to be split into 5 different phases:
@@ -66,8 +64,8 @@ a command line on one monitor)
 </ol>
 ## File structure
 
-MyIRC/
-	MyIRC/
+MyIRC/<br />
+<nbsp>MyIRC/
 		__init__.py
 	bin/
 	docs/
