@@ -64,21 +64,18 @@ a command line on one monitor)
 </ol>
 ## File structure
 
-MyIRC/<br />
-<nbsp>MyIRC/
-		__init__.py
-	bin/
-	docs/
-	setup.py
-	tests/
-		MyIRC_tests.py
-		__init__.py
+MyIRC/  
+	   src/  
+	   bin/  
+	   docs/  
+	   setup.py  
+	   tests/  
 		
 The file structure and general setup of the project is from 
 	learnpythonthehardway.org
 
 		
-MyIRC will contain all of the modules containing source code and classes.
+src will contain all of the modules containing source code and classes.
 Bin will be where the binary or final version of all the code will go 
 after being built. Docs will contain data, files and other resources 
 that are required (icons, images, etc). Tests will be where all of 
