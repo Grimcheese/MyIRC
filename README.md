@@ -29,17 +29,6 @@ The Project is going to be split into 5 different phases:
 	<li>Release</li>
 </ol>
 
-## Progress so far
-### Intial project planning and setup
-Installed latest version of python and pylauncher to correctly run the
-version
-of python that I want. This has required me to install the WiX Toolset 
-to build pylauncher. Wix could be useful at a later stage when 
-building MyIRC.
-
-Python packages nose, distribute and virtualenv have all been installed 
-to assist with development
-
 ## Developer Info
 Required packages
 <ul>
@@ -55,13 +44,13 @@ All text is written with a 70 character length so as to fit with the
 way my current environment is setup (notepad++ with multiple files and
 a command line on one monitor)
 
-<ol>
+<ul>
 	<li>Function names use camel case beginning with a lower case 
 	letter (exampleFunctionNameHere) </li>
 	<li>Class names use camel case beginning with a capital letter 
 	(ExampleClassNameHere)</li>
 	<li>Tabs are set to 4 spaces</li>
-</ol>
+</ul>
 ## File structure
 
 MyIRC/  
