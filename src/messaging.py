@@ -1,4 +1,6 @@
-from netcode import Client, Server, BaseClient
+#! python3
+
+import netcode
 
 """
 	Source code that implements messages used to transfer information
@@ -34,14 +36,14 @@ class Message(object):
 	
 	delimiter = '\n'
 	
-	def __init__(self, type, message, params = ""):
+	def __init__(self, type, message, paramString = ""):
 		assert type >= 0 and type <= 3
 		
 		self.type = type
 		self.message = message
 		self.parameters = []
-		if len(params) != 0:
-			self.parameters = params.split(" ")
+		if len(paramString) != 0:
+			self.parameters = paramString.split(" ")
 	
 	# Returns the length as an int
 	def Length(self):
@@ -73,12 +75,13 @@ class Message(object):
 class MessageHandler(object):
 	
 	def __init__(self):
-		
+		pass
 		
 	def HandleMessage(self, message, source):
 		pass
 		
 	def HandleMeta(self, message):
+		pass 
 		
 	def HandleCommunication(self, message):
 		pass
@@ -106,26 +109,40 @@ class ServerMessageHandler(MessageHandler):
 		
 	def HandleMessage(self, msg, source, clientlist):
 		if msg.GetType() == "META":
-			HandleMeta(msg)
+			print(msg.message)
+			self.HandleMeta(msg, clientlist)
 		elif msg.GetType() == "VOICE" or msg.GetType() == "TEXT":
-			HandleCommunication(msg, source, clientlist)
+			print(str(source) + ":" + msg.message)
+			self.HandleCommunication(msg, source, clientlist)
 		
 		return clientlist
 		
 	def HandleCommunication(self, message, source, clientlist):
 		for client in clientlist:
-			if client != source:
-				Client.client.EstablishConnection()
-				Client.client.Send(message)
-				Client.client.CloseConnection()
+			if client.name != source:
+				client.EstablishConnection()
+				client.SendMessage(message)
+				client.CloseConnection()
 		
-		print(message.message)
+		
 	
 	def HandleMeta(self, message, clientlist):
-		if message.message == "CONNECT"
-			newClient = Client(message.parameters[0], message.parameters[1], message.parameters[2])
-			clientlist.append(newClient)
-		
+		if message.message == "CONNECT":
+			newClient = netcode.Client(message.parameters[0], message.parameters[1], eval(message.parameters[2]))
+			alreadyconnected = False
+			for connectedclient in clientlist:
+				if connectedclient.name == newClient.name:
+					alreadyconnected = True
+			
+			if alreadyconnected == False:
+				clientlist.append(newClient)
+				print("New connection from " + str(newClient))
+				# Send acknowledgement to the client
+			#else:	
+				# Send denial error to the client
+			for client in clientlist:
+				print(client.name)
+			
 		return clientlist
 	
 # The messageQueue is a list of all the messages that have yet to 
@@ -139,19 +156,19 @@ class MessageQueue(object):
 		self.messageQueue = []
 
 	# Add a new message to the message queue
-	def Enqueue(message):
+	def Enqueue(self, message):
 		self.messageQueue.append(message)
 	
-	def Dequeue():
-		msg = Peek()
+	def Dequeue(self):
+		msg = self.Peek()
 		if msg != None:
 			return self.messageQueue.pop(0)
 		else:
 			return None
 	
 	# Returns the next message in the queue or None
-	def Peek()
-		if self.SizeOfQueue() > 0:
+	def Peek(self):
+		if len(self.messageQueue) > 0:
 			return self.messageQueue[0]
 		else:
 			return None
@@ -169,7 +186,7 @@ def StringToMessageObject(messageString):
 	parts = messageString.split(Message.delimiter)
 	type = eval(parts[0])
 	str = parts[1]
-	params = parts[2].split(" ")
+	params = parts[2]
 
 	message = Message(type, str, params)
 	

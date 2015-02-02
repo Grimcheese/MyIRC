@@ -1,3 +1,5 @@
+#! python3
+
 import socket
 from netcode import *
 from messaging import *
@@ -15,7 +17,7 @@ serverSocket.sock.bind((host, port))
 serverSocket.sock.listen(5)
 
 handler = ServerMessageHandler()
-
+queue = MessageQueue()
 # When the server receives a communication message from a client the
 # server will send that message to all the other clients that are 
 # connected to the server.
@@ -58,10 +60,10 @@ while True:
 	
 	msgString = currentClient.ReceiveMessage()
 	
-	print(msgString)
 	# Message is handled
-	clientMessage = StringToMessageObject(msgString)
-	handler.HandleMessage(clientMessage, currentClient, clientList)
+	msg = StringToMessageObject(msgString)
+	
+	handler.HandleMessage(msg, msg.parameters[0], clientList)
 	
 	# Socket is destroyed
 	currentClient.CloseConnection()

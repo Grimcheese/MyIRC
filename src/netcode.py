@@ -1,4 +1,6 @@
-from messaging import Message
+#! python3
+
+from messaging import *
 
 import socket, sys
 
@@ -128,7 +130,10 @@ class BaseClient(object):
 			if bit != Message.delimiter:
 				bits.append(bit)
 				
-		return ''.join(bits)	
+		return ''.join(bits)
+		
+	def __str__(self):
+		return self.name
 		
 	##################################################################
 
