@@ -1,5 +1,4 @@
 #! python3
-
 import netcode
 
 """
@@ -20,6 +19,16 @@ import netcode
 		StringToMessageObject
 """
 
+"""
+	Error message codes
+		Message(0, ERROR, ERRORCODE)
+	
+	Error codes are integer values that are part of the message as the first
+	parameter
+	
+	0 	= Multiple users already connected to server 
+		
+"""
 
 # Class to store network messages
 #
@@ -137,8 +146,9 @@ class ServerMessageHandler(MessageHandler):
 				print("New connection from " + str(newClient))
 				# Send acknowledgement to the client
 				newClient.SendMessage(ack)
-			#else:	
+			else:	
 				# Send denial error to the client
+				SendError("0")
 			for client in clientlist:
 				print(client.name)
 			
@@ -172,9 +182,10 @@ class MessageQueue(object):
 		else:
 			return None
 
+			
+
 # Helper functions for dealing with messages in general
 ######################################################################
-
 
 # Converts a string to a message object. 
 #
@@ -190,4 +201,13 @@ def StringToMessageObject(messageString):
 	message = Message(type, str, params)
 	
 	return message
+	
+def SendError(client, errorPrompt):
+	errorMessage = Message(0, "ERROR", errorPrompt)
+	
+	client.EstablishConnection()
+	client.SendMessage(errorMessage)
+	client.Disconnect()
+	
+	
 	
