@@ -148,7 +148,7 @@ class ServerMessageHandler(MessageHandler):
 				newClient.SendMessage(ack)
 			else:	
 				# Send denial error to the client
-				SendError("0")
+				SendError(newClient, "0")
 			for client in clientlist:
 				print(client.name)
 			
@@ -201,9 +201,14 @@ def StringToMessageObject(messageString):
 	message = Message(type, str, params)
 	
 	return message
+
+def SendAck(client):
+	msg = Message(0, "ACK")
 	
-def SendError(client, errorPrompt):
-	errorMessage = Message(0, "ERROR", errorPrompt)
+	client.Establish
+
+def SendError(client, errorCode):
+	errorMessage = Message(0, "ERROR", errorCode)
 	
 	client.EstablishConnection()
 	client.SendMessage(errorMessage)
