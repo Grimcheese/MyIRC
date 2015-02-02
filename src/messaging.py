@@ -123,8 +123,6 @@ class ServerMessageHandler(MessageHandler):
 				client.EstablishConnection()
 				client.SendMessage(message)
 				client.CloseConnection()
-		
-		
 	
 	def HandleMeta(self, message, clientlist):
 		if message.message == "CONNECT":
