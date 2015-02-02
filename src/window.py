@@ -1,7 +1,10 @@
 from tkinter import *
+from tkinter import ttk
 
 root = Tk()
 
-mainframe = ttk.Frame(root)
+win = TopLevel(root)
+menubar = Menu(win)
+win['menu'] = menubar
 
 root.mainloop()
