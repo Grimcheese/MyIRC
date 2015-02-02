@@ -136,6 +136,7 @@ class ServerMessageHandler(MessageHandler):
 				clientlist.append(newClient)
 				print("New connection from " + str(newClient))
 				# Send acknowledgement to the client
+				newClient.SendMessage(ack)
 			#else:	
 				# Send denial error to the client
 			for client in clientlist:

@@ -4,29 +4,30 @@ import socket
 from netcode import *
 from messaging import *
 
-serverList = []
-defaultServer = Server("Test Server", socket.gethostname(), 12345)
-serverList.append(defaultServer)
 
-Username = "Alby"
 
 # Attempts to connect to the specified server
 # Will wait 5 - 10 seconds for a reply from the server
-def ConnectToServer(server):
+def ConnectToServer(server, username):
 	server.EstablishConnection()
-	connectMessage = Message(0, "CONNECT", "Alby 192.168.1.6 12345")
+	connectMessage = Message(0, "CONNECT", username + " 192.168.1.6 12345")
 	server.SendMessage(connectMessage)
+	
+	server.ReceiveMessage()
+	
 	server.CloseConnection()
+	
+	currentServer = server
 	
 	# If an ack is received add the server to the serverlist
 	
-def DisconnectFromServer(server):
+def DisconnectFromServer(server, username):
 	server.EstablishConnection()
-	msg = Message(0, "DISCONNECT", Username)
+	msg = Message(0, "DISCONNECT", username)
 	server.SendMessage(msg)
 	server.CloseConnection()
 
-def GetServer(name):
+def GetServer(name, serverList):
 	for server in serverList:
 		if server.name == name:
 			return server
@@ -44,7 +45,7 @@ def GetServer(name):
 #	/disconnect
 #		/disconnect
 #		/disconnect servername
-def Commands(str):
+def Commands(str, settings):
 	list = str.split(" ")
 	command = list[0]
 	
@@ -53,39 +54,58 @@ def Commands(str):
 	if command == "/connect":
 		# no parameters
 		if parameters == 0:
-			ConnectToServer(defaultServer)
-			currentServer = defaultServer
+			ConnectToServer(settings[1], settings[0])
 		elif parameters == 1:
-			ConnectToServer(GetServer(list[1]))
+			ConnectToServer(GetServer(list[1], settings[2]), settings[0])
 		elif parameters == 3:
-			newServer = Server(list[1], list[2], list[3])
-			ConnectToServer(newServer)
+			newServer = Server(list[1], list[2], eval(list[3]))
+			ConnectToServer(newServer, settings[0])
 		else:
 			print("Invalid number of parameters")
 	elif command == "/disconnect":
 		if parameters == 0:
-			DisconnectFromServer(currentServer)
+			DisconnectFromServer(settings[1], settings[0])
 		elif parameters == 1:
-			DisconnectFromServer(GetServer(list[1]))
+			DisconnectFromServer(GetServer(list[1], settings[2]), settings[0])
 		else:
 			print("Invalid number of parameters")
 	else:
 		print("Not a valid command")
 			
-def ParseString(str):
+def ParseString(str, settings):
 	if len(str) > 0:
 		if str[0] == "/":
-			Commands(str)
+			Commands(str, settings)
 		else:
-			msgStr = "2\n" + str + "\n" + Username + "\n"
-			currentServer.EstablishConnection()
-			currentServer.SendMessage(StringToMessageObject(msgStr))
-			currentServer.CloseConnection()
-
-print("Welcome to MyIRC")
-prompt = str(currentServer) + ":"
-userStr = input(prompt)
-while userStr != "exit":
-	ParseString(userStr)
-	userStr = input(prompt)
+			if currentServer != None:
+				currentServer = settings[1]
+				msgStr = "2\n" + str + "\n" + settings[0] + "\n"
+				currentServer.EstablishConnection()
+				currentServer.SendMessage(StringToMessageObject(msgStr))
+				currentServer.CloseConnection()
+			
+def Startup(userName, currentServer, serverList, defaultServer):
+	print("Welcome to MyIRC")
+	# Load previous settings
+	# Show previous settings to user
+	# Ask if use previous or make new settings
+	userName = input("Set username: ")
 	
+	return [userName, currentServer, serverList, defaultServer]
+	
+def main():
+	serverList = []
+	defaultServer = Server("Test Server", socket.gethostname(), 12345)
+	serverList.append(defaultServer)
+	currentServer = defaultServer
+	Username = "Alby"
+	
+	prompt = str(currentServer) + ": "
+
+	settings = Startup(Username, currentServer, serverList, defaultServer)
+	
+	userStr = input(prompt)
+	while userStr != "exit":
+		ParseString(userStr, settings)
+		userStr = input(prompt)
+main()
