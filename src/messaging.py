@@ -1,3 +1,24 @@
+from netcode import Client, Server, BaseClient
+
+"""
+	Source code that implements messages used to transfer information
+	across a network for the MyIRC client and server.
+	
+	This file contains the implementation for the network protocols 
+	of MyIRC.
+	
+	Classes: 
+		Message
+		MessageHandler
+		ClientMessageHandler
+		ServerMessageHandler
+		MessageQueue
+		
+	File also contains miscellaneous helper methods related to messages
+		StringToMessageObject
+"""
+
+
 # Class to store network messages
 #
 # The length is used to indicate to the receiver how long the rest of 
@@ -53,8 +74,59 @@ class MessageHandler(object):
 	
 	def __init__(self):
 		
-	def HandleMessage(self, message):
 		
+	def HandleMessage(self, message, source):
+		pass
+		
+	def HandleMeta(self, message):
+		
+	def HandleCommunication(self, message):
+		pass
+		
+class ClientMessageHandler(MessageHandler):
+	
+	def __init__(self):
+		super(ClientMessageHandler, self).__init__()
+		
+	def HandleMessage(self, msg, source):
+		if msg.GetType() == "META":
+			pass
+		elif msg.GetType() == "VOICE":
+			pass
+		elif msg.GetType() == "TEXT":
+			TextMessage(msg, source)
+		
+	def TextMessage(self, message, source):
+		print(message.message)
+		
+class ServerMessageHandler(MessageHandler):
+
+	def __init__(self):
+		super(ServerMessageHandler, self).__init__()
+		
+	def HandleMessage(self, msg, source, clientlist):
+		if msg.GetType() == "META":
+			HandleMeta(msg)
+		elif msg.GetType() == "VOICE" or msg.GetType() == "TEXT":
+			HandleCommunication(msg, source, clientlist)
+		
+		return clientlist
+		
+	def HandleCommunication(self, message, source, clientlist):
+		for client in clientlist:
+			if client != source:
+				Client.client.EstablishConnection()
+				Client.client.Send(message)
+				Client.client.CloseConnection()
+		
+		print(message.message)
+	
+	def HandleMeta(self, message, clientlist):
+		if message.message == "CONNECT"
+			newClient = Client(message.parameters[0], message.parameters[1], message.parameters[2])
+			clientlist.append(newClient)
+		
+		return clientlist
 	
 # The messageQueue is a list of all the messages that have yet to 
 # be handled. It should only be accessed using the functions provided:
